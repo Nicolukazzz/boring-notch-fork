@@ -17,4 +17,7 @@ extension Defaults.Keys {
     static let pomodoroRoundsBeforeLongBreak = Key<Int>("pomodoroRoundsBeforeLongBreak", default: 4)
     static let pomodoroSound = Key<Bool>("pomodoroSound", default: true)
     static let pomodoroShowWhenClosed = Key<Bool>("pomodoroShowWhenClosed", default: true)
+
+    // MARK: Stats
+    static let statsEnabled = Key<Bool>("statsEnabled", default: true)
 }

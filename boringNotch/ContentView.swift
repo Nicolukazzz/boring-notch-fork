@@ -594,6 +594,8 @@ struct ContentView: View {
                             )
                         case .pomodoro: // fork
                             PomodoroView()
+                        case .stats: // fork
+                            StatsView()
                         }
                     }
                 }

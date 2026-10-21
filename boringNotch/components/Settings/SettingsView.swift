@@ -24,6 +24,7 @@ private enum SettingsTab: String, CaseIterable, Identifiable {
     case about
     // fork: personal settings
     case pomodoro
+    case stats
 
     enum Icon {
         case system(String)
@@ -47,6 +48,7 @@ private enum SettingsTab: String, CaseIterable, Identifiable {
         case .shortcuts: "Shortcuts"
         case .about: "About"
         case .pomodoro: "Pomodoro" // fork
+        case .stats: "Stats" // fork
         }
     }
 
@@ -65,6 +67,7 @@ private enum SettingsTab: String, CaseIterable, Identifiable {
         case .shortcuts: .system("keyboard")
         case .about: .system("info.circle")
         case .pomodoro: .system("timer") // fork
+        case .stats: .system("gauge.with.dots.needle.33percent") // fork
         }
     }
 }
@@ -119,6 +122,8 @@ struct SettingsView: View {
                     ShortcutsSettingsView()
                 case .pomodoro: // fork
                     PomodoroSettingsView()
+                case .stats: // fork
+                    StatsSettingsView()
                 case .about:
                     if let controller = updaterController {
                         AboutView(updaterController: controller)

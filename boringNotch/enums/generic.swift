@@ -23,6 +23,7 @@ enum NotchViews {
     case shelf
     // fork: personal tabs
     case pomodoro
+    case stats
 }
 
 enum DownloadIndicatorStyle: String, Defaults.Serializable {

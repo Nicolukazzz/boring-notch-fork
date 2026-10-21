@@ -64,6 +64,9 @@ final class BNLunarBrightnessEvent: NSObject, NSSecureCoding {
     func activateBrowserTab(_ bundleIdentifier: String, matching title: String, raise: Bool, with reply: @escaping (Bool) -> Void)
     func listAudioTabs(_ bundleIdentifier: String, with reply: @escaping (Data) -> Void)
     func toggleBrowserTabPlayback(_ bundleIdentifier: String, matching title: String, with reply: @escaping (Int) -> Void)
+    // fork: system stats that need access outside the sandbox (BoringNotchXPCHelper+Stats.swift)
+    func currentTemperature(with reply: @escaping (NSNumber?) -> Void)
+    func topCPUApps(with reply: @escaping (Data) -> Void)
 }
 
 @objc protocol BoringNotchXPCHelperDelegate {

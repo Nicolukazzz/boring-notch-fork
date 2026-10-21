@@ -402,6 +402,43 @@ final class XPCHelperClient: NSObject, ObservableObject {
         }
     }
 
+    // MARK: - fork: Stats tab
+
+    func currentTemperature() async -> Double? {
+        do {
+            let service = ensureRemoteService()
+            let result: NSNumber? = try await service.withContinuation { service, continuation in
+                service.currentTemperature { value in
+                    continuation.resume(returning: value)
+                }
+            }
+            return result?.doubleValue
+        } catch {
+            lastError = .transport(underlying: error)
+            return nil
+        }
+    }
+
+    /// `(responsible pid, cpu percent)` pairs, highest first.
+    func topCPUApps() async -> [(pid: pid_t, cpu: Double)] {
+        do {
+            let service = ensureRemoteService()
+            let json: Data = try await service.withContinuation { service, continuation in
+                service.topCPUApps { data in
+                    continuation.resume(returning: data)
+                }
+            }
+            let pairs = (try? JSONSerialization.jsonObject(with: json)) as? [[Double]] ?? []
+            return pairs.compactMap { pair in
+                guard pair.count == 2 else { return nil }
+                return (pid: pid_t(pair[0]), cpu: pair[1])
+            }
+        } catch {
+            lastError = .transport(underlying: error)
+            return []
+        }
+    }
+
     /// 1 paused, 0 resumed, -1 no player button found in the tab
     func toggleBrowserTabPlayback(bundleIdentifier: String, title: String) async -> Int {
         do {

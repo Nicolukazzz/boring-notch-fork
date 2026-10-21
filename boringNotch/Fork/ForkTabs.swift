@@ -9,11 +9,13 @@ import Defaults
 
 enum ForkTabs {
     static let pomodoro = TabModel(label: "Pomodoro", icon: "timer", view: .pomodoro)
+    static let stats = TabModel(label: "Stats", icon: "gauge.with.dots.needle.33percent", view: .stats)
 
     /// Tabs appended after upstream's Home and Shelf.
     static var extra: [TabModel] {
         var result: [TabModel] = []
         if Defaults[.pomodoroEnabled] { result.append(pomodoro) }
+        if Defaults[.statsEnabled] { result.append(stats) }
         return result
     }
 
