@@ -15,7 +15,8 @@ xcodebuild -project boringNotch.xcodeproj -scheme boringNotch -configuration Rel
 
 osascript -e 'tell application id "theboringteam.boringnotch" to quit' 2>/dev/null || true
 sleep 2
-pkill -f "oring ?[Nn]otch.app/Contents/MacOS" 2>/dev/null || true
+# Also stops the media adapter and helper processes left behind by the app.
+pkill -f "oring ?[Nn]otch.app/Contents/" 2>/dev/null || true
 
 # Remove both the legacy and the current bundle name so only one copy exists.
 rm -rf "/Applications/boringNotch.app" "/Applications/Boring Notch.app"
