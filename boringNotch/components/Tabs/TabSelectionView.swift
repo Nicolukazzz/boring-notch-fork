@@ -25,7 +25,7 @@ struct TabSelectionView: View {
     var body: some View {
         // fork: pill-style tab bar; the selected capsule slides between tabs.
         HStack(spacing: 2) {
-            ForEach(tabs) { tab in
+            ForEach(tabs + ForkTabs.extra) { tab in // fork: extra tabs
                 let isSelected = coordinator.currentView == tab.view
                 TabButton(label: tab.label, icon: tab.icon, selected: isSelected) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {

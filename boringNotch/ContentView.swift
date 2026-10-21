@@ -18,6 +18,7 @@ struct ContentView: View {
     @EnvironmentObject var vm: BoringViewModel
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @ObservedObject var musicManager = MusicManager.shared
+    @ObservedObject var pomodoro = PomodoroManager.shared // fork
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var brightnessManager = BrightnessManager.shared
     @ObservedObject var volumeManager = VolumeManager.shared
@@ -160,6 +161,7 @@ struct ContentView: View {
         case batteryStatus
         case osd(SneakContentType)
         case activities([LiveActivityItem])
+        case pomodoro // fork
         case face
         case idle
     }
@@ -175,6 +177,7 @@ struct ContentView: View {
         if coordinator.shouldShowSneakPeek(on: vm.screenUUID) {
             return .osd(coordinator.sneakPeekState(for: vm.screenUUID).type)
         }
+        if showsPomodoroActivity { return .pomodoro } // fork
         if !liveActivities.isEmpty, !vm.hideOnClosed {
             return .activities(liveActivities)
         }
@@ -196,6 +199,8 @@ struct ContentView: View {
         } else if coordinator.expandingView.type == .battery && coordinator.expandingView.show
             && vm.notchState == .closed && Defaults[.showPowerStatusNotifications] {
             chinWidth = 640
+        } else if showsPomodoroActivity { // fork
+            chinWidth += pomodoroChinExtraWidth
         } else if vm.notchState == .closed, !vm.hideOnClosed, let activity = selectedActivity {
             // Sized for whichever activity is actually on top, not for
             // whichever happens to exist — otherwise swiping to music while a
@@ -474,6 +479,9 @@ struct ContentView: View {
                               gestureProgress: $gestureProgress
                           )
                               .transition(.opacity)
+                      } else if showsPomodoroActivity { // fork
+                          PomodoroLiveActivity()
+                              .frame(alignment: .center)
                       } else if !liveActivities.isEmpty && vm.notchState == .closed && !vm.hideOnClosed {
                           LiveActivityStack(items: liveActivities, index: $activityIndex) { item in
                               switch item {
@@ -584,6 +592,8 @@ struct ContentView: View {
                                 dropInteraction: vm.dropInteraction,
                                 animation: vm.animation
                             )
+                        case .pomodoro: // fork
+                            PomodoroView()
                         }
                     }
                 }
