@@ -305,11 +305,15 @@ struct ContentView: View {
                     .onHover { hovering in
                         handleHover(hovering)
                     }
-                    .onTapGesture {
-                        if vm.notchState == .closed && !shouldDisplayNowPlayingFallbackNotice {
-                            doOpen()
-                        }
-                    }
+                    // fork: mask the tap while open so tab and control buttons get every click.
+                    .gesture(
+                        TapGesture().onEnded {
+                            if vm.notchState == .closed && !shouldDisplayNowPlayingFallbackNotice {
+                                doOpen()
+                            }
+                        },
+                        including: vm.notchState == .closed ? .all : .subviews
+                    )
                     .conditionalModifier(Defaults[.enableGestures] && !shouldDisplayNowPlayingFallbackNotice) { view in
                         view
                             .panGesture(direction: .down) { translation, phase in

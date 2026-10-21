@@ -23,30 +23,26 @@ struct TabSelectionView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @Namespace var animation
     var body: some View {
-        HStack(spacing: 0) {
+        // fork: pill-style tab bar; the selected capsule slides between tabs.
+        HStack(spacing: 2) {
             ForEach(tabs) { tab in
-                    TabButton(label: tab.label, icon: tab.icon, selected: coordinator.currentView == tab.view) {
-                        withAnimation(.smooth) {
-                            coordinator.currentView = tab.view
-                        }
+                let isSelected = coordinator.currentView == tab.view
+                TabButton(label: tab.label, icon: tab.icon, selected: isSelected) {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        coordinator.currentView = tab.view
                     }
-                    .frame(height: 26)
-                    .foregroundStyle(tab.view == coordinator.currentView ? .white : .gray)
-                    .background {
-                        if tab.view == coordinator.currentView {
-                            Capsule()
-                                .fill(coordinator.currentView == tab.view ? Color(nsColor: .secondarySystemFill) : Color.clear)
-                                .matchedGeometryEffect(id: "capsule", in: animation)
-                        } else {
-                            Capsule()
-                                .fill(coordinator.currentView == tab.view ? Color(nsColor: .secondarySystemFill) : Color.clear)
-                                .matchedGeometryEffect(id: "capsule", in: animation)
-                                .hidden()
-                        }
+                }
+                .background {
+                    if isSelected {
+                        Capsule()
+                            .fill(Color(nsColor: .secondarySystemFill))
+                            .matchedGeometryEffect(id: "capsule", in: animation)
                     }
+                }
             }
         }
-        .clipShape(Capsule())
+        .padding(2)
+        .background(Capsule().fill(Color.white.opacity(0.04)))
     }
 }
 
