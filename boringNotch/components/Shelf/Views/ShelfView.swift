@@ -57,6 +57,7 @@ struct ShelfView: View {
                         .padding()
                 }
             }
+            .overlay(alignment: .topTrailing) { ShelfClearButton() } // fork
             .transaction { transaction in
                 transaction.animation = animation
             }

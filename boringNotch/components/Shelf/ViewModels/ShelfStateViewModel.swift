@@ -25,6 +25,7 @@ final class ShelfStateViewModel: ObservableObject {
 
     private init() {
         items = ShelfPersistenceService.shared.load()
+        clearOnLaunchIfNeeded() // fork
     }
 
     private func schedulePersistence() {
@@ -54,6 +55,12 @@ final class ShelfStateViewModel: ObservableObject {
     func remove(_ item: ShelfItem) {
         item.cleanupStoredData()
         items.removeAll { $0.id == item.id }
+    }
+
+    // fork: used by the clear-shelf button and clear-on-launch
+    func removeAll() {
+        items.forEach { $0.cleanupStoredData() }
+        items = []
     }
 
     func updateBookmark(for item: ShelfItem, bookmark: Data) {

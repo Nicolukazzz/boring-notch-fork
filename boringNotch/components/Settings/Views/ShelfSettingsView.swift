@@ -49,6 +49,8 @@ struct ShelfSettingsView: View {
                 Text("General")
             }
 
+            ShelfCleanupSettingsSection() // fork
+
             Section {
                 Picker("Quick Share Service", selection: $quickShareProvider) {
                     ForEach(quickShareService.availableProviders, id: \.id) { provider in

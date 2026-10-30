@@ -20,4 +20,7 @@ extension Defaults.Keys {
 
     // MARK: Stats
     static let statsEnabled = Key<Bool>("statsEnabled", default: true)
+
+    // MARK: Shelf
+    static let shelfClearOnLaunch = Key<Bool>("shelfClearOnLaunch", default: true)
 }

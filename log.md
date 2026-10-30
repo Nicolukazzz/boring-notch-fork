@@ -16,6 +16,7 @@ Aquí registramos qué cambiamos, por qué y cómo mantenerlo. Agrega una entrad
 - **Pestañas tipo píldora**: la pestaña activa muestra su nombre, y toda la píldora se puede cliquear.
 - **Pomodoro**: tiempos configurables, anillo en el notch cerrado, sonido y aviso al terminar cada sesión.
 - **Stats**: CPU, memoria, temperatura del chip, disco libre y la app que más consume.
+- **Limpiar la Bandeja**: botón de papelera en la esquina de la Bandeja, botón "Clear shelf now" en Ajustes y limpieza automática al abrir la app (activada por defecto).
 - **PR #1711** (de un colaborador, todavía no aprobado arriba): cambiar entre pestañas del navegador que reproducen YouTube u otros medios.
 
 ## Cómo actualizar (más o menos cada mes)
@@ -45,10 +46,11 @@ Solo reinstalar, sin actualizar: `scripts/install-local.sh`.
 
 **Archivos propios** (ellos nunca los tocan, así que no generan conflictos):
 - `boringNotch/Fork/`: carpeta sincronizada; Xcode incluye sola cualquier archivo nuevo.
-  - `ForkDefaults.swift`: preferencias (`pomodoro*`, `statsEnabled`).
+  - `ForkDefaults.swift`: preferencias (`pomodoro*`, `statsEnabled`, `shelfClearOnLaunch`).
   - `ForkTabs.swift`: pestañas extra y cuándo mostrar la barra.
   - `Pomodoro/`: `PomodoroManager`, `PomodoroView`, `PomodoroLiveActivity`, `ContentView+Pomodoro`.
   - `Stats/`: `SystemStatsManager`, `StatsView`.
+  - `Shelf/ShelfCleanup.swift`: botón para vaciar la Bandeja, sección de Ajustes y limpieza al iniciar (`shelfClearOnLaunch`).
 - `boringNotch/components/Settings/Views/PomodoroSettingsView.swift` y `StatsSettingsView.swift`.
 - `BoringNotchXPCHelper/SystemSensors.swift` y `BoringNotchXPCHelper+Stats.swift`: temperatura y CPU por app. Corren en el helper, que no tiene sandbox.
 - `scripts/install-local.sh` y `scripts/update-from-upstream.sh`.
@@ -60,6 +62,9 @@ Solo reinstalar, sin actualizar: `scripts/install-local.sh`.
 - `components/Tabs/TabSelectionView.swift` y `TabButton.swift`: estilo píldora y `ForkTabs.extra`.
 - `components/Notch/BoringHeader.swift`: mostrar la barra de pestañas.
 - `components/Settings/SettingsView.swift`: secciones Pomodoro y Stats.
+- `components/Shelf/ViewModels/ShelfStateViewModel.swift`: `removeAll()` y la llamada a `clearOnLaunchIfNeeded()` en `init`.
+- `components/Shelf/Views/ShelfView.swift`: el botón de papelera sobre el panel.
+- `components/Settings/Views/ShelfSettingsView.swift`: la sección "Cleanup".
 - `Shared/BoringNotchXPCHelperProtocol.swift` y `XPCHelperClient/XPCHelperClient.swift`: llamadas de Stats al helper.
 - `boringNotchApp.swift` (`startUpdater()` comentado) e `Info.plist` (sin `SUFeedURL`).
 
@@ -73,6 +78,11 @@ Solo reinstalar, sin actualizar: `scripts/install-local.sh`.
 - **Al reinstalar quedaban procesos huérfanos** (`mediaremote-adapter.pl`) de la app anterior. El script ya los cierra.
 
 ## Historial
+
+### 2026-10-29: Limpiar la Bandeja
+- Botón de papelera en la esquina superior derecha de la Bandeja (solo aparece si hay archivos).
+- Ajustes → Shelf → Cleanup: "Clear shelf when the app starts" (activado) y "Clear shelf now".
+- Solo quita los elementos de la Bandeja; los archivos originales no se borran.
 
 ### 2026-10-21: Migración a la 2.8-rc.2 + PR #1711
 - Rama `personal` creada desde `v2.8-rc.2`. Commits:
