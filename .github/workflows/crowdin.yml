@@ -10,6 +10,8 @@ on:
 
 jobs:
   crowdin:
+    # fork has no Crowdin secrets: skip here, run only on upstream
+    if: github.repository == 'TheBoredTeam/boring.notch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
